@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:bot_toast/bot_toast.dart';
 import 'core/di.dart';
 import 'app_router.dart';
-import 'services/biometric_service.dart';
+import 'views/splash_screen.dart';
+import 'widgets/loading_widget.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -60,55 +61,11 @@ class _MyAppState extends State<MyApp> {
       builder: BotToastInit(),
       navigatorObservers: [BotToastNavigatorObserver()],
       home: _themeReady
-          ? const SplashGate()
+          ? const SplashScreen()
           : const Scaffold(                 // sementara (theme loading cepat)
         backgroundColor: Color(0xFF00BCD4),
-        body: Center(child: CircularProgressIndicator()),
+        body: Center(child: LoadingWidget(color: Colors.white, size: 60)),
       ),
     );
   }
-}
-
-class SplashGate extends StatefulWidget {
-  const SplashGate({super.key});
-  @override
-  State<SplashGate> createState() => _SplashGateState();
-}
-
-class _SplashGateState extends State<SplashGate> {
-  @override
-  void initState() {
-    super.initState();
-    _decide();
-  }
-
-  Future<void> _decide() async {
-    // biar frame pertama sempat render
-    await Future.microtask(() {});
-
-    final hasToken = await DI.auth.hasToken();
-    if (!hasToken) {
-      if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/login');
-      return;
-    }
-
-    // sudah login → cek apakah lock biometrik aktif
-    final ok = await DI.biometric.gateOpen(reason: 'Buka Kosanku');
-    if (!ok) {
-      if (!mounted) return;
-      Navigator.pushReplacementNamed(context, '/login');
-      return;
-    }
-    Navigator.pushReplacementNamed(context, '/app');
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const Scaffold(
-      backgroundColor: Color(0xFF00BCD4),
-      body: Center(child: CircularProgressIndicator()),
-    );
-  }
-
 }

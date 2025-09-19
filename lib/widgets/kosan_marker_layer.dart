@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import '../models/kosan.dart';
+import '../views/detail/detail_screen.dart';
 
 class KosanMarkerLayer extends StatelessWidget {
   final LatLng? me;
@@ -36,16 +37,27 @@ class KosanMarkerLayer extends StatelessWidget {
                       color: CupertinoColors.activeBlue),
                   const SizedBox(width: 8),
                   Expanded(
-                    child: Text(
-                      k.name,
-                      style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                    child: GestureDetector(
+                      onTap: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => DetailScreen(kosan: k),
+                          ),
+                        );
+                      },
+                      child: Text(
+                        k.name,
+                        style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
                   CupertinoButton(
                     padding: const EdgeInsets.symmetric(horizontal: 4),
-                    minSize: 0,
+                    minimumSize: Size.zero,
                     child: const Icon(CupertinoIcons.xmark_circle_fill,
                         color: CupertinoColors.systemGrey),
                     onPressed: () => Navigator.pop(context),
@@ -69,6 +81,21 @@ class KosanMarkerLayer extends StatelessWidget {
                 Row(children: [
                   Expanded(
                     child: CupertinoButton.filled(
+                      onPressed: () {
+                        Navigator.pop(context);
+                        Navigator.push(
+                          context,
+                          CupertinoPageRoute(
+                            builder: (context) => DetailScreen(kosan: k),
+                          ),
+                        );
+                      },
+                      child: const Text('Detail'),
+                    ),
+                  ),
+                  const SizedBox(width: 12),
+                  Expanded(
+                    child: CupertinoButton(
                       onPressed: () {
                         Navigator.pop(context);
                         onNavigate?.call(k);

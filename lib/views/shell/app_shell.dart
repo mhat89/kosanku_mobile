@@ -1,9 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../map/map_screen.dart';
 import '../explore/explore_screen.dart';
 import '../saved/saved_screen.dart';
-import '../settings/settings_screen.dart';
+import '../profile/profile_screen.dart';
 
 class AppShell extends StatefulWidget {
   const AppShell({super.key});
@@ -12,27 +13,36 @@ class AppShell extends StatefulWidget {
 }
 
 class _AppShellState extends State<AppShell> {
-  int index = 0;
+  int _selectedIndex = 0;
   final pages = const [
     MapScreen(),
     ExploreScreen(),
     SavedScreen(),
-    SettingsScreen(),
+    ProfileScreen(),
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: SafeArea(child: pages[index]),
-      bottomNavigationBar: CupertinoTabBar(
-        currentIndex: index,
-        onTap: (i) => setState(() => index = i),
+      body: SafeArea(child: pages[_selectedIndex]),
+      bottomNavigationBar: CurvedNavigationBar(
+        backgroundColor: Colors.transparent,
+        color: Colors.blue,
+        buttonBackgroundColor: Colors.blue,
+        height: 60,
+        animationDuration: const Duration(milliseconds: 300),
+        index: _selectedIndex,
         items: const [
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.map), label: 'Map'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.compass), label: 'Explore'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.bookmark), label: 'Saved'),
-          BottomNavigationBarItem(icon: Icon(CupertinoIcons.settings), label: 'Settings'),
+          Icon(CupertinoIcons.map, size: 30, color: Colors.white),
+          Icon(CupertinoIcons.compass, size: 30, color: Colors.white),
+          Icon(CupertinoIcons.bookmark, size: 30, color: Colors.white),
+          Icon(CupertinoIcons.person, size: 30, color: Colors.white),
         ],
+        onTap: (index) {
+          setState(() {
+            _selectedIndex = index;
+          });
+        },
       ),
     );
   }

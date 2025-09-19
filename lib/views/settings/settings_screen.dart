@@ -1,9 +1,14 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:local_auth/local_auth.dart';
+import 'package:curved_navigation_bar/curved_navigation_bar.dart';
 import '../../core/di.dart';
 import '../../ui/notifier.dart';
 import '../../services/biometric_service.dart';
+import '../map/map_screen.dart';
+import '../explore/explore_screen.dart';
+import '../saved/saved_screen.dart';
+import '../profile/profile_screen.dart';
 
 class SettingsScreen extends StatefulWidget {
   const SettingsScreen({super.key});
@@ -17,6 +22,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
   bool _bioAvail = false;
   bool _bioEnabled = false;
   List<BiometricType> _bioTypes = const [];
+  int _currentIndex = 3; // Settings is at index 3 (Profile tab)
 
   @override
   void initState() {
@@ -61,8 +67,10 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: [
+    return Scaffold(
+      backgroundColor: CupertinoColors.systemGroupedBackground,
+      body: ListView(
+        children: [
         ListTile(
           leading: const Icon(CupertinoIcons.person),
           title: const Text('Profile'),
@@ -136,7 +144,42 @@ class _SettingsScreenState extends State<SettingsScreen> {
           ),
 
         const Divider(),
-      ],
+        ],
+      ),
+      bottomNavigationBar: CurvedNavigationBar(
+         backgroundColor: Colors.transparent,
+         color: Colors.blue,
+         buttonBackgroundColor: Colors.blue,
+        height: 60,
+        animationDuration: const Duration(milliseconds: 300),
+        index: _currentIndex,
+        items: const [
+          Icon(CupertinoIcons.map, size: 30, color: Colors.white),
+          Icon(CupertinoIcons.compass, size: 30, color: Colors.white),
+          Icon(CupertinoIcons.bookmark, size: 30, color: Colors.white),
+          Icon(CupertinoIcons.person, size: 30, color: Colors.white),
+        ],
+        onTap: (i) {
+          setState(() {
+            _currentIndex = i;
+          });
+          // Navigate to different screens based on index
+          switch (i) {
+            case 0:
+              Navigator.pushReplacementNamed(context, '/map');
+              break;
+            case 1:
+              Navigator.pushReplacementNamed(context, '/explore');
+              break;
+            case 2:
+              Navigator.pushReplacementNamed(context, '/saved');
+              break;
+            case 3:
+              Navigator.pushReplacementNamed(context, '/profile');
+              break;
+          }
+        },
+      ),
     );
   }
 }

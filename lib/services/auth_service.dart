@@ -18,12 +18,15 @@ class AuthService {
   Future<void> saveEmail(String email) =>
       _storage.write(key: 'userEmail', value: email);
   Future<String?> getEmail() => _storage.read(key: 'userEmail');
+  
+  Future<String?> getFullName() => _storage.read(key: 'userName');
 
   Future<void> register(
       String email, String password, String fullName) async {
     await _api.post('/api/auth/register',
         data: {'email': email, 'password': password, 'full_name': fullName});
     await saveEmail(email);
+    await _storage.write(key: 'userName', value: fullName);
   }
 
   Future<void> resendOtp(String email) async =>
@@ -41,6 +44,15 @@ class AuthService {
         data: {'email': email, 'password': password});
     await _setToken((r.data as Map)['accessToken']?.toString());
     await saveEmail(email);
+    
+    // Simpan nama pengguna jika tersedia dalam respons
+    final userData = r.data as Map;
+    if (userData.containsKey('user') && userData['user'] is Map) {
+      final user = userData['user'] as Map;
+      if (user.containsKey('full_name')) {
+        await _storage.write(key: 'userName', value: user['full_name']?.toString());
+      }
+    }
   }
 
   Future<void> forgotPassword(String email) async =>
@@ -61,6 +73,7 @@ class AuthService {
       await _api.post('/api/auth/logout');
     } finally {
       await _storage.delete(key: 'accessToken');
+      await _storage.delete(key: 'userName');
       _api.setAuthToken(null); // <<< hapus header Authorization
     }
   }

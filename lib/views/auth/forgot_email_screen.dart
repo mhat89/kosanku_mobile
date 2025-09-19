@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import '../../core/di.dart';
 import '../../ui/notifier.dart';
+import 'dart:ui';
 
 class ForgotEmailScreen extends StatefulWidget {
   const ForgotEmailScreen({super.key});
@@ -45,26 +46,122 @@ class _ForgotEmailScreenState extends State<ForgotEmailScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final size = MediaQuery.of(context).size;
+    final theme = Theme.of(context);
+    final primaryColor = theme.colorScheme.primary;
+    
     return Scaffold(
-      appBar: AppBar(title: const Text('Lupa Password')),
-      body: Form(
-        key: formKey,
-        child: ListView(
-          padding: const EdgeInsets.all(16),
-          children: [
-            TextFormField(
-              controller: email,
-              decoration: const InputDecoration(labelText: 'Email'),
-              keyboardType: TextInputType.emailAddress,
-              validator: (v) =>
-              (v == null || v.isEmpty) ? 'Email wajib diisi' : null,
+      body: SingleChildScrollView(
+        child: Container(
+          height: size.height,
+          width: size.width,
+          decoration: BoxDecoration(
+            gradient: LinearGradient(
+              begin: Alignment.topLeft,
+              end: Alignment.bottomRight,
+              colors: [
+                primaryColor.withOpacity(0.8),
+                primaryColor.withOpacity(0.5),
+              ],
             ),
-            const SizedBox(height: 16),
-            FilledButton(
-              onPressed: loading ? null : _submit,
-              child: Text(loading ? 'Loading...' : 'Kirim OTP Reset'),
-            ),
-          ],
+          ),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              SizedBox(height: size.height * 0.1),
+              Padding(
+                padding: const EdgeInsets.only(left: 20),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    IconButton(
+                      icon: Icon(Icons.arrow_back, color: Colors.white),
+                      onPressed: () => Navigator.pop(context),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Lupa Password',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 30,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      'Masukkan email untuk reset password',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 18,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              SizedBox(height: size.height * 0.05),
+              Expanded(
+                child: Container(
+                  decoration: BoxDecoration(
+                    color: theme.scaffoldBackgroundColor,
+                    borderRadius: const BorderRadius.only(
+                      topLeft: Radius.circular(30),
+                      topRight: Radius.circular(30),
+                    ),
+                  ),
+                  child: Padding(
+                    padding: const EdgeInsets.all(24),
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          const SizedBox(height: 40),
+                          TextFormField(
+                            controller: email,
+                            decoration: InputDecoration(
+                              labelText: 'Email',
+                              prefixIcon: Icon(Icons.email_outlined),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                              ),
+                              enabledBorder: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(15),
+                                borderSide: BorderSide(color: Colors.grey.shade300),
+                              ),
+                            ),
+                            keyboardType: TextInputType.emailAddress,
+                            validator: (v) =>
+                            (v == null || v.isEmpty) ? 'Email wajib diisi' : null,
+                          ),
+                          const SizedBox(height: 30),
+                          SizedBox(
+                            width: double.infinity,
+                            height: 55,
+                            child: ElevatedButton(
+                              onPressed: loading ? null : _submit,
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: primaryColor,
+                                foregroundColor: Colors.white,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(15),
+                                ),
+                                elevation: 5,
+                              ),
+                              child: loading
+                                  ? CircularProgressIndicator(color: Colors.white)
+                                  : Text(
+                                      'Kirim OTP Reset',
+                                      style: TextStyle(fontSize: 18),
+                                    ),
+                            ),
+                          ),
+                        ],
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ],
+          ),
         ),
       ),
     );

@@ -6,8 +6,9 @@ class ApiClient {
   ApiClient(this._dio) {
     _dio.options
       ..baseUrl = AppConfig.baseUrl
-      ..connectTimeout = const Duration(seconds: 10)
-      ..receiveTimeout = const Duration(seconds: 20)
+      ..connectTimeout = const Duration(seconds: 30)
+      ..receiveTimeout = const Duration(seconds: 30)
+      ..sendTimeout = const Duration(seconds: 30)
       ..headers = {'Accept': 'application/json'};
   }
 

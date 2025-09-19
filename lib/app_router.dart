@@ -6,6 +6,7 @@ import 'views/auth/otp_screen.dart';
 import 'views/auth/forgot_email_screen.dart';
 import 'views/auth/reset_password_screen.dart';
 import 'views/auth/change_password_screen.dart';
+import 'views/profile/profile_screen.dart';
 
 class AppRouter {
   static Map<String, WidgetBuilder> routes = {
@@ -16,5 +17,6 @@ class AppRouter {
     '/forgot': (_) => const ForgotEmailScreen(),
     '/reset': (_) => const ResetPasswordScreen(),
     '/change-password': (_) => const ChangePasswordScreen(),
+    '/profile': (_) => const ProfileScreen(),
   };
 }
