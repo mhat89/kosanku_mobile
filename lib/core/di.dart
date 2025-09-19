@@ -48,10 +48,10 @@ class DI {
     // ====== PILIH PROVIDER ROUTING DI SINI ======
     // 1) OpenRouteService (ORS) – butuh API KEY
     routing = ORSRoutingService(Dio(),
-        'eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6IjZiNDRlMjE5MzJiNTQ4OGZiY2JiYTI4NTg2NjQ2NTc1IiwiaCI6Im11cm11cjY0In0=');
+        'API KEY');
 
     // 2) Google Directions (uncomment baris di bawah dan comment ORS di atas)
-    //routing = GoogleRoutingService(Dio(), 'AIzaSyC69pQRvVxNZFmih5QF2U5t-v_y72NT1Nc');
+    //routing = GoogleRoutingService(Dio(), 'API KEY');
     theme = ThemeController(storage); // <<< add
     biometric = BiometricService(storage); // <<< add
   }
